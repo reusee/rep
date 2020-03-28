@@ -39,6 +39,7 @@ func updateBook(book *Book) {
 			"def":  info.Pronounce + "\n" + strings.Join(info.Definitions, "\n"),
 		}
 		entry.Frequency = info.Frequency
+		entry.Key = word
 	}
 
 	pt("updated %d entries\n", len(book.Entries))
