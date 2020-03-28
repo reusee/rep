@@ -115,14 +115,11 @@ func main() {
 			return rand.Intn(2) == 0
 		})
 
-		if len(candidates) > 50 {
-			candidates = candidates[:50]
-		}
-
 		if len(candidates) == 0 {
 			return
 		}
 
+		n := 0
 		for _, candidate := range candidates {
 			a := candidate.Definitions[mode[0]]
 			b := candidate.Definitions[mode[1]]
@@ -146,6 +143,7 @@ func main() {
 				pt("%s\n", strings.Repeat("-", 40))
 				pt("%s\n", b)
 				pt("%s\n", strings.Repeat("-", 40))
+				n++
 
 			case "no", "n":
 				candidate.Practices = append(candidate.Practices, Practice{
@@ -156,6 +154,7 @@ func main() {
 				pt("%s\n", strings.Repeat("-", 40))
 				pt("%s\n", b)
 				pt("%s\n", strings.Repeat("-", 40))
+				n++
 
 			case "skip", "s":
 				candidate.Skip = true
@@ -165,6 +164,9 @@ func main() {
 
 			}
 			go save()
+			if n > 50 {
+				break
+			}
 		}
 
 	}
