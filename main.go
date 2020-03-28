@@ -100,7 +100,7 @@ func main() {
 				candidates = append(candidates, entry)
 			} else if len(times) == 1 && time.Since(times[0]) > time.Hour*18 {
 				candidates = append(candidates, entry)
-			} else if time.Since(times[0]) > times[0].Sub(times[1]) {
+			} else if len(times) >= 2 && time.Since(times[0]) > times[0].Sub(times[1]) {
 				candidates = append(candidates, entry)
 			}
 		}
