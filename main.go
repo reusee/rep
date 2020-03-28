@@ -140,9 +140,9 @@ func main() {
 					Mode: mode,
 					Pass: true,
 				})
-				pt("%s\n", strings.Repeat("-", 40))
+				pt("%s\n", strings.Repeat("=", 40))
 				pt("%s\n", b)
-				pt("%s\n", strings.Repeat("-", 40))
+				pt("%s\n", strings.Repeat("=", 40))
 				n++
 
 			case "no", "n":
@@ -151,9 +151,9 @@ func main() {
 					Mode: mode,
 					Pass: true,
 				})
-				pt("%s\n", strings.Repeat("-", 40))
+				pt("%s\n", strings.Repeat("=", 40))
 				pt("%s\n", b)
-				pt("%s\n", strings.Repeat("-", 40))
+				pt("%s\n", strings.Repeat("=", 40))
 				n++
 
 			case "skip", "s":

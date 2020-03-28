@@ -26,9 +26,6 @@ func updateBook(book *Book) {
 	}
 
 	for word, info := range words {
-		if strings.Contains(word, " ") {
-			continue
-		}
 		entry, ok := book.Entries[word]
 		if !ok {
 			entry = new(Entry)
