@@ -76,7 +76,12 @@ func main() {
 
 	for _, mode := range book.Modes {
 
-		var candidates []*Entry
+		type Candidate struct {
+			Entry       *Entry
+			Proficiency time.Duration
+			Spacing     time.Duration
+		}
+		var candidates []Candidate
 		for _, entry := range book.Entries {
 			if entry.Skip {
 				continue
@@ -97,11 +102,23 @@ func main() {
 				}
 			}
 			if len(times) == 0 {
-				candidates = append(candidates, entry)
-			} else if len(times) == 1 && time.Since(times[0]) > time.Hour*18 {
-				candidates = append(candidates, entry)
+				candidates = append(candidates, Candidate{
+					Entry:       entry,
+					Proficiency: 0,
+					Spacing:     0,
+				})
+			} else if len(times) == 1 && time.Since(times[0]) > time.Hour*48 {
+				candidates = append(candidates, Candidate{
+					Entry:       entry,
+					Proficiency: 0,
+					Spacing:     time.Since(times[0]),
+				})
 			} else if len(times) >= 2 && time.Since(times[0]) > times[0].Sub(times[1]) {
-				candidates = append(candidates, entry)
+				candidates = append(candidates, Candidate{
+					Entry:       entry,
+					Proficiency: times[0].Sub(times[1]),
+					Spacing:     time.Since(times[0]),
+				})
 			}
 		}
 		pt("%d candidates\n", len(candidates))
@@ -109,8 +126,11 @@ func main() {
 		sort.Slice(candidates, func(i, j int) bool {
 			a := candidates[i]
 			b := candidates[j]
-			if a.Frequency != b.Frequency {
-				return a.Frequency > b.Frequency
+			if d1, d2 := a.Spacing.Round(time.Hour*18), b.Spacing.Round(time.Hour*18); d1 != d2 {
+				return d1 < d2
+			}
+			if a.Entry.Frequency != b.Entry.Frequency {
+				return a.Entry.Frequency > b.Entry.Frequency
 			}
 			return rand.Intn(2) == 0
 		})
@@ -121,8 +141,8 @@ func main() {
 
 		n := 0
 		for _, candidate := range candidates {
-			a := candidate.Definitions[mode[0]]
-			b := candidate.Definitions[mode[1]]
+			a := candidate.Entry.Definitions[mode[0]]
+			b := candidate.Entry.Definitions[mode[1]]
 			pt("%s\n", strings.Repeat("-", 40))
 			pt("%s\n", a)
 			pt("%s\n", strings.Repeat("-", 40))
@@ -135,7 +155,7 @@ func main() {
 			switch answer {
 
 			case "yes", "y":
-				candidate.Practices = append(candidate.Practices, Practice{
+				candidate.Entry.Practices = append(candidate.Entry.Practices, Practice{
 					Time: time.Now(),
 					Mode: mode,
 					Pass: true,
@@ -146,7 +166,7 @@ func main() {
 				n++
 
 			case "no", "n":
-				candidate.Practices = append(candidate.Practices, Practice{
+				candidate.Entry.Practices = append(candidate.Entry.Practices, Practice{
 					Time: time.Now(),
 					Mode: mode,
 					Pass: true,
@@ -157,7 +177,7 @@ func main() {
 				n++
 
 			case "skip", "s":
-				candidate.Skip = true
+				candidate.Entry.Skip = true
 
 			default:
 				goto input
