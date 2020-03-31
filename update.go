@@ -31,9 +31,14 @@ func updateBook(book *Book) {
 			entry = new(Entry)
 			book.Entries[word] = entry
 		}
+		var defs []string
+		if info.Pronounce != "" {
+			defs = append(defs, info.Pronounce)
+		}
+		defs = append(defs, info.Definitions...)
 		entry.Definitions = map[string]string{
 			"word": strings.TrimSpace(info.Word),
-			"def":  info.Pronounce + "\n\n" + strings.Join(info.Definitions, "\n\n"),
+			"def":  strings.Join(defs, "\n\n"),
 		}
 		entry.Frequency = info.Frequency
 		entry.Key = word
