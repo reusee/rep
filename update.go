@@ -33,7 +33,7 @@ func updateBook(book *Book) {
 		}
 		entry.Definitions = map[string]string{
 			"word": strings.TrimSpace(info.Word),
-			"def":  info.Pronounce + "\n" + strings.Join(info.Definitions, "\n\n"),
+			"def":  info.Pronounce + "\n\n" + strings.Join(info.Definitions, "\n\n"),
 		}
 		entry.Frequency = info.Frequency
 		entry.Key = word
