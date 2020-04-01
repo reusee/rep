@@ -58,6 +58,16 @@ func main() {
 		updateBook(book)
 	}
 
+	freqCounter := make(map[int]int)
+	for _, entry := range book.Entries {
+		freqCounter[entry.Frequency]++
+	}
+	pt("freq: ")
+	for freq, n := range freqCounter {
+		pt("[%d %d] ", freq, n)
+	}
+	pt("\n")
+
 	var saving int32
 	save := func() {
 		if !atomic.CompareAndSwapInt32(&saving, 0, 1) {
