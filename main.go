@@ -179,6 +179,9 @@ func main() {
 			case "skip", "s":
 				candidate.Entry.Skip = true
 
+			case "quit", "q":
+				return
+
 			default:
 				goto input
 
